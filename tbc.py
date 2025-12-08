@@ -8,9 +8,21 @@ class Character:
     def __init__(self, name="Unnamed", hitPoints=10, hitChance=50, maxDamage=5, armor=0):
         self._name = str(name) if name is not None else "Unnamed"
         self._hitPoints = hitPoints
+        self._maxHitPoints=hitPoints
         self._hitChance = self.testInt(hitChance, 0, 100, 50)
         self._maxDamage = self.testInt(maxDamage, 1, 100, 5)
         self._armor = self.testInt(armor, 0, 100, 0)
+        
+    def resetStats(self):
+        self._hitPoints=self._maxHitPoints
+        
+    def upgradeStats(self):
+        self._maxHitPoints += random.randint(1, 4)   
+        self.hitChance = min(98, self.hitChance + random.randint(0, 2))  
+        self.maxDamage += random.randint(1, 3)      
+        self.armor += random.randint(0, 2)          
+        self.resetStats()
+
 
     def testInt(self, value, min=0, max=100, default=0):
         out = default
@@ -116,8 +128,7 @@ class Character:
 
 def fight(hero, villain):
     log = []
-
-    # Hero attacks first
+    
     roll = random.randint(1, 100)
     if roll <= hero.hitChance:
         damage = random.randint(1, hero.maxDamage)
